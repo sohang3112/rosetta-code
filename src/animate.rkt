@@ -1,6 +1,6 @@
-#lang racket
 ; https://rosettacode.org/wiki/Animation
 
+#lang racket
 (require racket/match)
 (require 2htdp/image)
 (require 2htdp/universe)
