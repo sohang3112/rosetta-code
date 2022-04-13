@@ -4,8 +4,7 @@
    command table containing a list of words.
    
    NOTE: Unit Tests are included in a rich comment at the end of the file"
-  (:require [clojure.string :refer [join]]
-            [clojure.test :refer [is deftest run-tests]]))
+  (:require [clojure.test :refer [is deftest run-tests]]))
 
 ; Warnings to improve performance
 (set! *warn-on-reflection* true)
@@ -19,7 +18,7 @@
 (defn join-words
   "Join words into a single string"
   ^String [strings]
-  (join " " strings))
+  (String/join " " strings))
 
 (def cmd-table
   "Command Table - List of words to match against"
