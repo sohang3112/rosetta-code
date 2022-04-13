@@ -36,7 +36,7 @@ RIght LEft  SAVE  SET SHift SI  SORT  SOS  STAck STATus  TOP TRAnsfer Type Up"))
   "Is abbr abbreviation of word?"
   ^Boolean [^String abbr, ^String word]
   (and (.startsWith (.toLowerCase word) (.toLowerCase abbr))
-       (<= (count (filter #(Character/isUpperCase %) word))
+       (<= (count (filter #(Character/isUpperCase ^char %) word))
            (count abbr)
            (count word))))
 
@@ -56,7 +56,7 @@ RIght LEft  SAVE  SET SHift SI  SORT  SOS  STAck STATus  TOP TRAnsfer Type Up"))
                   "*error*"))))
 
 ;; Example Input
-(print (solution "riG   rePEAT copies  put mo   rest    types   fup.    6       poweRin"))
+(time (print (solution "riG   rePEAT copies  put mo   rest    types   fup.    6       poweRin")))
 
 (comment
   ;; Unit Tests
