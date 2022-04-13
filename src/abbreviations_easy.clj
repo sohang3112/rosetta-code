@@ -3,8 +3,7 @@
    Given a list of inputs, check if they are valid abbreviations using a
    command table containing a list of words.
    
-   NOTE: Unit Tests are included in a rich comment at the end of the file"
-  (:require [clojure.test :refer [is deftest run-tests]]))
+   NOTE: Unit Tests are included in a rich comment at the end of the file")
 
 ; Warnings to improve performance
 (set! *warn-on-reflection* true)
@@ -60,6 +59,8 @@ RIght LEft  SAVE  SET SHift SI  SORT  SOS  STAck STATus  TOP TRAnsfer Type Up"))
 
 (comment
   ;; Unit Tests
+
+  (require '[clojure.test :refer [is deftest run-tests]])
 
   ; TODO - how to specify type of variable arguments
   (defn is-multiple
