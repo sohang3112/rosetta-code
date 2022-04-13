@@ -1,7 +1,8 @@
 ; Problem - http://rosettacode.org/wiki/Abbreviations,_easy
 
 (ns abbreviations-easy 
-  (:require [clojure.test :refer [is]]))
+  (:require [clojure.string :refer [join]] 
+            [clojure.test :refer [is]]))
 
 (defn words
   "Split string into words"
@@ -11,7 +12,7 @@
 (defn join-words
   "Join words into a single string"
   [strings]
-  (clojure.string/join " " strings))
+  (join " " strings))
 
 (def cmd-table
   "Command Table - List of words to match against"
