@@ -1,14 +1,16 @@
 ; Problem - http://rosettacode.org/wiki/Abbreviations,_easy
 
-(ns rosetta
-  (:require [clojure.test :refer :all]))
+(ns abbreviations-easy 
+  (:require [clojure.test :refer [is]]))
 
-(defn words [str]
+(defn words
   "Split string into words"
+  [str]
   (.split str "\\s+"))
 
-(defn join-words [strings]
+(defn join-words
   "Join words into a single string"
+  [strings]
   (clojure.string/join " " strings))
 
 (def cmd-table
