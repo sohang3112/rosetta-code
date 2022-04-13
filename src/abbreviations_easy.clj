@@ -1,6 +1,9 @@
-; Problem - http://rosettacode.org/wiki/Abbreviations,_easy
-
 (ns abbreviations-easy 
+  "Solution of http://rosettacode.org/wiki/Abbreviations,_easy
+   Given a list of inputs, check if they are valid abbreviations using a
+   command table containing a list of words.
+   
+   NOTE: Unit Tests are included in a rich comment at the end of the file"
   (:require [clojure.string :refer [join]] 
             [clojure.test :refer [is deftest run-tests]]))
 
