@@ -53,12 +53,17 @@ RIght LEft  SAVE  SET SHift SI  SORT  SOS  STAck STATus  TOP TRAnsfer Type Up"))
 (comment
   ;; Unit Tests
 
-  (for [abbr ["ALT" "alt" "ALTE" "ALTER"]]
-    (is (abbr-valid? abbr "ALTer")))
-  (for [abbr ["AL", "ALF", "ALTERS", "TER", "A"]]
-    (is (not (abbr-valid? abbr "ALTer"))))
-  (for [abbr ["o" "ov" "oVe" "over" "overL" "overla"]]
-    (is (abbr-valid? abbr "Overlay")))
+  (defn test-all
+    "Test predicate for all arguments"
+    [pred & args]
+    (for [arg args]
+      (is (pred arg) arg)))
+
+  (test-all #(abbr-valid? % "ALTer") "ALT" "alt" "ALTE" "ALTER")
+  (test-all #(not (abbr-valid? % "ALTer")) "AL", "ALF", "ALTERS", "TER", "A")
+  (test-all #(abbr-valid? % "Overlay") "o" "ov" "oVe" "over" "overL" "overla")
 
   (is (= (solution "riG   rePEAT copies  put mo   rest    types   fup.    6       poweRin")
-         "RIGHT REPEAT *error* PUT MOVE RESTORE *error* *error* *error* POWERINPUT")))
+         "RIGHT REPEAT *error* PUT MOVE RESTORE *error* *error* *error* POWERINPUT"))
+  
+  )
