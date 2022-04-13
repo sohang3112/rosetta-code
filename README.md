@@ -7,5 +7,7 @@ which I have contributed to [Rosetta Code](http://rosettacode.org/wiki/Rosetta_C
 | Problem | Solution & Language |
 |--|--|
 | [Isqrt (Integer Square Root) in Racket](http://rosettacode.org/wiki/Isqrt_(integer_square_root)_of_X) |  [isqrt.rkt - Racket](src/isqrt.rkt) |
-| [Abbreviations, easy](https://rosettacode.org/wiki/Abbreviations,_easy) |[abbreviations_easy.clj - Clojure](src/abbreviations_easy.clj)
+| [Animation](https://rosettacode.org/wiki/Animation) |  [animate.rkt - Racket](src/animate.rkt) |
+| [Abbreviations, easy](https://rosettacode.org/wiki/Abbreviations,_easy) |[abbreviations_easy.clj - Clojure](src/abbreviations_easy.clj)⌈
 
+⌈
