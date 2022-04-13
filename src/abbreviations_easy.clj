@@ -53,7 +53,7 @@ RIght LEft  SAVE  SET SHift SI  SORT  SOS  STAck STATus  TOP TRAnsfer Type Up"))
   ^String [^String str]
   (join-words (for [abbr (words str)]
                 (if-let [word (find-word-for-abbr abbr)]
-                  (.toUpperCase word)
+                  (.toUpperCase ^String word)
                   "*error*"))))
 
 ;; Example Input
@@ -62,11 +62,12 @@ RIght LEft  SAVE  SET SHift SI  SORT  SOS  STAck STATus  TOP TRAnsfer Type Up"))
 (comment
   ;; Unit Tests
 
+  ; TODO - how to specify type of variable arguments
   (defn is-multiple
     "Test predicate for all arguments"
     [pred & args]
     (doseq [arg args]
-      (is (pred arg) arg)))
+      (is (pred ^String arg))))
 
   (deftest test-abbr-valid
     (is-multiple #(abbr-valid? % "ALTer") "ALT" "alt" "ALTE" "ALTER")
@@ -77,4 +78,6 @@ RIght LEft  SAVE  SET SHift SI  SORT  SOS  STAck STATus  TOP TRAnsfer Type Up"))
     (is (= (solution "riG   rePEAT copies  put mo   rest    types   fup.    6       poweRin")
            "RIGHT REPEAT *error* PUT MOVE RESTORE *error* *error* *error* POWERINPUT")))
 
-  (run-tests))
+  (run-tests)
+  
+  )
