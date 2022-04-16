@@ -12,6 +12,10 @@
 
 ; TODO: type hint all functions, and (Maybe?) use clojure.typed
 
+; Warnings to improve performance
+(set! *warn-on-reflection* true)
+(set! *unchecked-math* :warn-on-boxed)
+
 (defn words
   "Split string into words"
   [^String str]
@@ -25,24 +29,23 @@
 ;; TODO: write macro try-with-recur to allow recur to be used inside try
 ;; Then use this macro to rewrite below function
 
-;; TODO: return lazy-seq instead of vector
 (defn parse-cmd-table
   "Parse list of strings in command table into list of words and numbers
    If number is missing for any word, then the word is not included"
-  [cmd-table]
-  (loop [i 0,
-         ans []]
-    (let [cmd-count (count cmd-table)]
-      (if (= i cmd-count)
-        ans
-        (let [[i ans]
-              (try [(+ i 2)
-                    (conj ans
-                          {:word (nth cmd-table i),
-                           :num (Integer/parseInt ^String (nth cmd-table (inc i)))})]
-                   (catch NumberFormatException _
-                     [(inc i) ans]))]
-          (recur i ans))))))
+  ([cmd-table]
+   (parse-cmd-table cmd-table 0 []))
+  ([cmd-table i ans]
+   (let [cmd-count (count cmd-table)]
+     (if (= i cmd-count)
+       ans
+       (let [[i ans]
+             (try [(+ i 2)
+                   (conj ans
+                         {:word (nth cmd-table i),
+                          :num (Integer/parseInt ^String (nth cmd-table (inc i)))})]
+                  (catch NumberFormatException _
+                    [(inc i) ans]))]
+         (recur cmd-table i ans))))))
 
 (def cmd-table
   (->
