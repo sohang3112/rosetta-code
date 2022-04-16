@@ -29,6 +29,8 @@
 ;; TODO: write macro try-with-recur to allow recur to be used inside try
 ;; Then use this macro to rewrite below function
 
+(defrecord CommandWord [^String word, ^long min-abbr-size])
+
 (defn parse-cmd-table
   "Parse list of strings in command table into list of words and numbers
    If number is missing for any word, then the word is not included"
@@ -41,8 +43,9 @@
        (let [[i ans]
              (try [(+ i 2)
                    (conj ans
-                         {:word (nth cmd-table i),
-                          :num (Integer/parseInt ^String (nth cmd-table (inc i)))})]
+                         (CommandWord. (nth cmd-table i),
+                                       (Integer/parseInt ^String (nth cmd-table
+                                                                      (inc i)))))]
                   (catch NumberFormatException _
                     [(inc i) ans]))]
          (recur cmd-table i ans))))))
@@ -61,10 +64,11 @@
    parse-cmd-table))
 
 (defn abbr?
-  "Is abbr a valid abbreviation of this word and number?"
-  [abbr & {:keys [word num]}]
-  (and (<= num (count abbr) (count word))
-       (starts-with-ignore-case word abbr)))
+  "Is abbr a valid abbreviation of this command?"
+  ^Boolean [^String abbr, ^CommandWord cmd]
+  (let [{:keys [word min-abbr-size]} cmd]
+    (and (<= min-abbr-size (count abbr) (count word))
+         (starts-with-ignore-case word abbr))))
 
 (comment
   ;; Unit Tests
@@ -75,14 +79,17 @@
   (require '[clojure.test :refer [is are deftest run-tests]])
 
   (deftest valid-abbreviations
-    (are [abbr] (abbr? abbr :word "ALTER" :num 3)
-      "ALT" "aLt" "ALTE" "ALTER")
-    (are [abbr] (abbr? abbr :word "overlay" :num 1)
-      "o" "ov" "oVe" "over" "overL" "overla"))
+    (let [cmd (CommandWord. "ALTER" 3)]
+      (are [abbr] (abbr? abbr cmd)
+        "ALT" "aLt" "ALTE" "ALTER"))
+    (let [cmd (CommandWord. "overlay" 1)]
+      (are [abbr] (abbr? abbr cmd)
+        "o" "ov" "oVe" "over" "overL" "overla")))
 
   (deftest invalid-abbreviations
-    (are [abbr] (not (abbr? abbr :word "ALTER" :num 3))
-      "AL" "ALF" "ALTERS" "TER" "A"))
+    (let [cmd (CommandWord. "ALTER" 3)]
+      (are [abbr] (not (abbr? abbr cmd))
+        "AL" "ALF" "ALTERS" "TER" "A")))
 
   (run-tests)
 

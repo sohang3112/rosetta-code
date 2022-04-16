@@ -62,7 +62,7 @@ RIght LEft  SAVE  SET SHift SI  SORT  SOS  STAck STATus  TOP TRAnsfer Type Up"))
 
   (require '[clojure.test :refer [is deftest run-tests]])
 
-  ; TODO - how to specify type of variable arguments
+  ; TODO: replace this with clojure.test/are macro
   (defn is-multiple
     "Test predicate for all arguments"
     [pred & args]
