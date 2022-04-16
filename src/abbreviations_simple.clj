@@ -18,37 +18,36 @@
 ;;   A blank input   (or a null input)   should return a null string.
 ;;   Show all output here.
 
-;; Tests
-;;   ALT,   aLt,   ALTE,   and   ALTER   are all abbreviations of   ALTER 3
-;;   AL,   ALF,   ALTERS,   TER,   and   A   aren't valid abbreviations of   ALTER 3
-;;   The   3   indicates that any abbreviation for   ALTER   must be at least three characters
-;;   Any word longer than five characters can't be an abbreviation for   ALTER
-;;   o,   ov,   oVe,   over,   overL,   overla   are all acceptable abbreviations for   overlay 1
-
-
 (ns abbreviations-simple)
+
+; TODO: type hint all functions, and (Maybe?) use clojure.typed
 
 (defn words
   "Split string into words"
   [^String str]
   (.split str "\\s+"))
 
-(defn parse-cmd-table 
-  "Parse list of strings in command table into list of words and numbers"
+;; TODO: write macro try-with-recur to allow recur to be used inside try
+;; Then use this macro to rewrite below function
+
+;; TODO: return lazy-seq instead of vector
+(defn parse-cmd-table
+  "Parse list of strings in command table into list of words and numbers
+   If number is missing for any word, then the word is not included"
   [cmd-table]
   (loop [i 0,
          ans []]
     (let [cmd-count (count cmd-table)]
-      (if (< i cmd-count)
-        (let [word (nth cmd-table i),
-              [num i] (try
-                        [(Integer/parseInt ^String (nth cmd-table (inc i)))
-                         (+ i 2)]
-                        (catch NumberFormatException _
-                          [1 (inc i)]))]
-          (recur i 
-                 (conj ans {:word word, :num num})))
-        ans))))
+      (if (= i cmd-count)
+        ans
+        (let [[i ans]
+              (try [(+ i 2)
+                    (conj ans
+                          {:word (nth cmd-table i),
+                           :num (Integer/parseInt ^String (nth cmd-table (inc i)))})]
+                   (catch NumberFormatException _
+                     [(inc i) ans]))]
+          (recur i ans))))))
 
 (def cmd-table
   (->
@@ -60,8 +59,30 @@
    msg  next 1 overlay 1 parse preserve 4 purge 3 put putD query 1 quit  read recover 3
    refresh renum 3 repeat 3 replace 1 Creplace 2 reset 3 restore 4 rgtLEFT right 2 left
    2  save  set  shift 2  si  sort  sos  stack 3 status 4 top  transfer 3  type 1  up 1"
-   words 
+   words
    parse-cmd-table))
+
+(defn abbr?
+  "Is abbr a valid abbreviation of this word and number?"
+  [abbr & {:keys [word num]}]
+  false)
+
+;; Tests
+;;   Any word longer than five characters can't be an abbreviation for   ALTER
+;;     are all acceptable abbreviations for   overlay 1
+
+(require '[clojure.test :refer [is are deftest run-tests]])
+
+(deftest valid-abbreviations
+  (are [abbr] (abbr? abbr :word "ALTER" :num 3)
+    "ALT" "aLt" "ALTE" "ALTER")
+  (are [abbr] (abbr? abbr :word "overlay" :num 1⌈)
+     "o" "ov" "oVe" "over" "overL" "overla"))
+
+(deftest invalid-abbreviations
+  (are [abbr] (not (abbr? abbr :word "ALTER" :num 3))
+    "AL" "ALF" "ALTERS" "TER" "A"))
+
 
 
 
