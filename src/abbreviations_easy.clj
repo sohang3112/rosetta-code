@@ -30,7 +30,7 @@ MErge MODify MOve MSG Next Overlay PARSE PREServe PURge PUT PUTD  Query  QUIT
 READ  RECover REFRESH RENum REPeat  Replace CReplace  RESet  RESTore  RGTLEFT
 RIght LEft  SAVE  SET SHift SI  SORT  SOS  STAck STATus  TOP TRAnsfer Type Up"))
 
-; TODO - cache word properties
+; TODO: cache word properties
 (defn abbr-valid?
   "Is abbr abbreviation of word?"
   ^Boolean [^String abbr, ^String word]
@@ -39,7 +39,7 @@ RIght LEft  SAVE  SET SHift SI  SORT  SOS  STAck STATus  TOP TRAnsfer Type Up"))
            (count abbr)
            (count word))))
 
-; TODO - how to specify return type as either String or nil ?
+; TODO: how to specify return type as either String or nil ?
 (defn find-word-for-abbr
   "Find first word matching abbreviation, or nil if not found"
   [^String abbr]
@@ -54,8 +54,8 @@ RIght LEft  SAVE  SET SHift SI  SORT  SOS  STAck STATus  TOP TRAnsfer Type Up"))
                   (.toUpperCase ^String word)
                   "*error*"))))
 
-;; Example Input
-(time (print (solution "riG   rePEAT copies  put mo   rest    types   fup.    6       poweRin")))
+;; Example Input - Also prints total elapsed time at the end
+(time (println (solution "riG   rePEAT copies  put mo   rest    types   fup.    6       poweRin")))
 
 (comment
   ;; Unit Tests
