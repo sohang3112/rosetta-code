@@ -21,6 +21,11 @@
   [^String str]
   (.split str "\\s+"))
 
+(defn join-words
+  "Join words into a single string"
+  ^String [strings]
+  (String/join " " strings))
+
 ;; SOURCE: https://www.stackoverflow.com/a/38947571/12947681
 (defn starts-with-ignore-case
   ^Boolean [^String string, ^String prefix]
@@ -69,6 +74,17 @@
   (let [{:keys [word min-abbr-size]} cmd]
     (and (<= min-abbr-size (count abbr) (count word))
          (starts-with-ignore-case word abbr))))
+
+(defn solution
+  "Find word matching each abbreviation in input (or *error* if not found),
+   and join results into a string"
+  ^String [^String str]
+  (join-words (for [abbr (words str)]
+                (if-let [{:keys [word]} (first (filter #(abbr? abbr %) cmd-table))]
+                  (.toUpperCase ^String word)
+                  "*error*"))))
+
+ (println (solution "riG   rePEAT copies  put mo   rest    types   fup.    6       poweRin"))
 
 (comment
   ;; Unit Tests
