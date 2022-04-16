@@ -8,7 +8,12 @@
 ;;   A blank input   (or a null input)   should return a null string.
 ;;   Show all output here.
 
-(ns abbreviations-simple)
+(ns abbreviations-simple
+  "Solution of http://rosettacode.org/wiki/Abbreviations,_simple
+   Given a list of inputs, check if they are valid abbreviations using a
+   command table containing a list of words and numbers.
+   
+   NOTE: Unit Tests are included in a rich comment at the end of the file")
 
 ; TODO: type hint all functions, and (Maybe?) use clojure.typed
 
