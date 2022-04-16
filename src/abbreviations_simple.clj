@@ -1,15 +1,5 @@
 ; https://rosettacode.org/wiki/Abbreviations,_simple
 
-;; Notes concerning the above   command table:
-
-;;   a command is followed by an optional number, which indicates the minimum abbreviation
-;;   if there isn't a number after the command,   then there isn't an abbreviation permitted
-
-;;   A valid abbreviation is a word that has:
-;;   at least the minimum length of the word's minimum number in the command table
-;;   compares equal (regardless of case) to the leading characters of the word in the command table
-;;   a length not longer than the word in the command table
-
 ;; Task
 ;;   The command table needn't be verified/validated.
 ;;   Write a function to validate if the user "words"   (given as input)   are valid   (in the command table).
@@ -26,6 +16,11 @@
   "Split string into words"
   [^String str]
   (.split str "\\s+"))
+
+;; SOURCE: https://www.stackoverflow.com/a/38947571/12947681
+(defn starts-with-ignore-case
+  ^Boolean [^String string, ^String prefix]
+  (.regionMatches string true 0 prefix 0 (count prefix)))
 
 ;; TODO: write macro try-with-recur to allow recur to be used inside try
 ;; Then use this macro to rewrite below function
@@ -65,23 +60,31 @@
 (defn abbr?
   "Is abbr a valid abbreviation of this word and number?"
   [abbr & {:keys [word num]}]
-  false)
+  (and (<= num (count abbr) (count word))
+       (starts-with-ignore-case word abbr)))
 
-;; Tests
-;;   Any word longer than five characters can't be an abbreviation for   ALTER
-;;     are all acceptable abbreviations for   overlay 1
+(comment
+  ;; Unit Tests
 
-(require '[clojure.test :refer [is are deftest run-tests]])
+  ;; Tests
+  ;;   Any word longer than five characters can't be an abbreviation for   ALTER
 
-(deftest valid-abbreviations
-  (are [abbr] (abbr? abbr :word "ALTER" :num 3)
-    "ALT" "aLt" "ALTE" "ALTER")
-  (are [abbr] (abbr? abbr :word "overlay" :num 1⌈)
-     "o" "ov" "oVe" "over" "overL" "overla"))
+  (require '[clojure.test :refer [is are deftest run-tests]])
 
-(deftest invalid-abbreviations
-  (are [abbr] (not (abbr? abbr :word "ALTER" :num 3))
-    "AL" "ALF" "ALTERS" "TER" "A"))
+  (deftest valid-abbreviations
+    (are [abbr] (abbr? abbr :word "ALTER" :num 3)
+      "ALT" "aLt" "ALTE" "ALTER")
+    (are [abbr] (abbr? abbr :word "overlay" :num 1)
+      "o" "ov" "oVe" "over" "overL" "overla"))
+
+  (deftest invalid-abbreviations
+    (are [abbr] (not (abbr? abbr :word "ALTER" :num 3))
+      "AL" "ALF" "ALTERS" "TER" "A"))
+
+  (run-tests)
+
+  ;; Unit Tests End
+  )
 
 
 
