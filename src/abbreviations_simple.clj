@@ -1,13 +1,5 @@
 ; https://rosettacode.org/wiki/Abbreviations,_simple
 
-;; Task
-;;   The command table needn't be verified/validated.
-;;   Write a function to validate if the user "words"   (given as input)   are valid   (in the command table).
-;;   If the word   is   valid,   then return the full uppercase version of that "word".
-;;   If the word isn't valid,   then return the lowercase string:   *error*       (7 characters).
-;;   A blank input   (or a null input)   should return a null string.
-;;   Show all output here.
-
 (ns abbreviations-simple
   "Solution of http://rosettacode.org/wiki/Abbreviations,_simple
    Given a list of inputs, check if they are valid abbreviations using a
@@ -24,7 +16,7 @@
 (defn words
   "Split string into words"
   [^String str]
-  (.split str "\\s+"))
+  (.split (.stripLeading str) "\\s+"))
 
 (defn join-words
   "Join words into a single string"
@@ -50,15 +42,12 @@
    (let [cmd-count (count cmd-table)]
      (if (= i cmd-count)
        ans
-       (let [[i ans]
-             (try [(+ i 2)
-                   (conj ans
-                         (CommandWord. (nth cmd-table i),
-                                       (Integer/parseInt ^String (nth cmd-table
-                                                                      (inc i)))))]
-                  (catch NumberFormatException _
-                    [(inc i) ans]))]
-         (recur cmd-table i ans))))))
+       (let [word (nth cmd-table i),
+             [i num] (try [(+ i 2)
+                           (Integer/parseInt ^String (nth cmd-table (inc i)))]
+                          (catch NumberFormatException _
+                            [(inc i) 0]))]
+         (recur cmd-table i (conj ans (CommandWord. word num))))))))
 
 (def cmd-table
   (->
@@ -89,7 +78,7 @@
                   (.toUpperCase ^String word)
                   "*error*"))))
 
- (println (solution "riG   rePEAT copies  put mo   rest    types   fup.    6       poweRin"))
+(println (solution "riG   rePEAT copies  put mo   rest    types   fup.    6       poweRin"))
 
 (comment
   ;; Unit Tests
@@ -111,6 +100,10 @@
     (let [cmd (CommandWord. "ALTER" 3)]
       (are [abbr] (not (abbr? abbr cmd))
         "AL" "ALF" "ALTERS" "TER" "A")))
+
+  (deftest final-solution
+    (is (= (solution " riG   rePEAT copies  put mo   rest    types   fup.    6       poweRin")
+           "RIGHT REPEAT *error* PUT MOVE RESTORE *error* *error* *error* POWERINPUT")))
 
   (run-tests)
 
