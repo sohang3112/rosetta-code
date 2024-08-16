@@ -6,8 +6,7 @@
 (def script-dir (.getParent (java.io.File. *file*)))
 
 (def days-of-week
-  (with-open [reader (io/reader (io/file script-dir
-                                         "days-of-the-week.txt"))]
+  (with-open [reader (io/reader (io/file script-dir "days-of-the-week.txt"))]
     (vec (for [line (line-seq reader)]
            (.split line "\\s+")))))
 
